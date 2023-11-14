@@ -7,10 +7,11 @@ client_secret = '0bcf065450cd47289b378b98f8ba0533'
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-def get_song_info(track_title):
+def get_song_info(track_title, artist):
     try:
 
-        results = sp.search(q=track_title, type='track', limit=1)
+        query = f"{track_title} artist:{artist}"
+        results = sp.search(q=query, type='track', limit=1)
         track = results['tracks']['items'][0]
         audio_features = sp.audio_features([track['id']])[0]
 
@@ -33,11 +34,13 @@ def get_song_info(track_title):
 if __name__ == "__main__":
     
     track_name = input("Enter song: ")
+    artist = input("Enter the artist: ")
+    
 
-    song_info = get_song_info(track_name)
+    song_info = get_song_info(track_name, artist)
 
     if song_info:
-        print("Song Information:")
+        print("\nSong Information:")
         for key, value in song_info.items():
             print(f"{key}: {value}")
     else:
